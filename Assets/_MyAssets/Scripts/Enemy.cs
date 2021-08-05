@@ -23,21 +23,46 @@ public class Enemy : MonoBehaviour
 
     IEnumerator SS()
     {
-        while(true)
+        while (true)
         {
-            ShotCircle();
+            //ShotCircle(10);
+            StartCoroutine(ShotTornado(20));
             yield return new WaitForSeconds(1f);
         }
     }
 
-    public void ShotCircle()
+    public void ShotCircle(int n)
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
 
         float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
-        GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
-        instance.GetComponent<Rigidbody2D>().velocity = new Vector2(targetVector.x, targetVector.y).normalized * speed;
-        Debug.LogError("dd");
+
+        for (int i = 0; i < n; i++)
+        {
+            GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
+
+            float angleRad = angle * Mathf.Deg2Rad;
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * speed;
+            angle += 360 / n;
+        }
+    }
+
+    IEnumerator ShotTornado(int n)
+    {
+        Vector3 targetVector = target.transform.position - transform.position;
+        Vector3 len = transform.position - target.transform.position;
+
+        float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
+
+        for (int i = 0; i < n; i++)
+        {
+            GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
+
+            float angleRad = angle * Mathf.Deg2Rad;
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * speed;
+            angle += 360 / n;
+            yield return new WaitForSeconds(0.05f);
+        }
     }
 }
