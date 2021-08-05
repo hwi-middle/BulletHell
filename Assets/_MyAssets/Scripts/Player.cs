@@ -9,6 +9,23 @@ public class Player : MonoBehaviour
     [SerializeField] private float verticalSpeedMultiplier = 1;
     private Rigidbody2D rbd;
 
+    static Player instance;
+    public static Player Instance { get { Init(); return instance; } }
+
+    static void Init()
+    {
+        if (instance == null)
+        {
+            GameObject go = GameObject.FindWithTag("Player");
+            if (go == null)
+            {
+                Debug.LogError("Player not found");
+            }
+
+            instance = go.GetComponent<Player>();
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
