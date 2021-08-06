@@ -4,88 +4,111 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private const float DEFAULT_ANGLE = 0;
     private Player target;
     [SerializeField] private float speed = 1;
     [SerializeField] private GameObject bullet;
+
+    [Header("Circle")]
+    public float bulletSpeed1;
+    public int lines1;
+
+    [Header("Tornado")]
+    public float bulletSpeed2;
+    public int iteration2;
+    public float delay2;
+
+
+    [Header("Windmill")]
+    public float bulletSpeed3;
+    public int iteration3;
+    public int lines2;
+    public float bias;
+    public float delay3;
 
     // Start is called before the first frame update
     void Start()
     {
         target = Player.Instance;
-        StartCoroutine(ShotSpinTornado(30));
+        //StartCoroutine(SS());
     }
 
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    IEnumerator SS()
-    {
-        while (true)
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            //ShotCircle(10);
-            StartCoroutine(ShotTornado(10));
-            yield return new WaitForSeconds(1f);
+            StartCoroutine(ShotCircle(lines1, false));
+        }
+        else if (Input.GetKeyDown(KeyCode.X))
+        {
+            StartCoroutine(ShotTornado(iteration2, delay2));
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            StartCoroutine(ShotWindmill(iteration3, lines2, bias, delay3));
         }
     }
 
-    public void ShotCircle(int n)
+    IEnumerator ShotCircle(int lines, bool setToTarget)
+    {
+        Vector3 targetVector = target.transform.position - transform.position;
+        Vector3 len = transform.position - target.transform.position;
+
+        float angle = DEFAULT_ANGLE;
+        if (setToTarget)
+        {
+            angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
+        }
+
+        for (int i = 0; i < lines; i++)
+        {
+            GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
+
+            float angleRad = angle * Mathf.Deg2Rad;
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed1;
+            angle += 360 / lines;
+        }
+        yield break;
+    }
+
+    IEnumerator ShotTornado(int iteration, float delay)
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
 
         float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < iteration; i++)
         {
             GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
 
             float angleRad = angle * Mathf.Deg2Rad;
-            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * speed;
-            angle += 360 / n;
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed2;
+            angle += 360 / iteration;
+            yield return new WaitForSeconds(delay);
         }
     }
 
-    IEnumerator ShotTornado(int n)
+    IEnumerator ShotWindmill(int iteration, int lines, float bias, float delay)
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
 
-        float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
-
-        for (int i = 0; i < n; i++)
+        float b = 0;
+        for (int i = 0; i < iteration; i++)
         {
-            GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
-
-            float angleRad = angle * Mathf.Deg2Rad;
-            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * speed;
-            angle += 360 / n;
-            yield return new WaitForSeconds(0.05f);
-        }
-    }
-
-    IEnumerator ShotSpinTornado(int n)
-    {
-        Vector3 targetVector = target.transform.position - transform.position;
-        Vector3 len = transform.position - target.transform.position;
-
-        float bias = 0;
-        for (int i = 0; i < 3; i++)
-        {
-            float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg + bias;
-            for (int j = 0; j < n; j++)
+            float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg + b;
+            for (int j = 0; j < lines; j++)
             {
                 GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
 
                 float angleRad = angle * Mathf.Deg2Rad;
-                instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * speed;
-                angle += 360 / n;
-            }   
-            bias += 20 * Mathf.Rad2Deg;
-            yield return new WaitForSeconds(0.3f);
+                instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed3;
+                angle += 360 / lines;
+            }
+            b += bias;
+            yield return new WaitForSeconds(delay);
         }
-
     }
 }
