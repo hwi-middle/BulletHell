@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Tornado")]
     public float bulletSpeed2;
-    public int iteration2;
+    public int lines2;
     public float delay2;
 
 
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.X))
         {
-            StartCoroutine(ShotTornado(iteration2, delay2));
+            StartCoroutine(ShotTornado(lines2, delay2));
         }
         else if (Input.GetKeyDown(KeyCode.C))
         {
@@ -72,20 +72,20 @@ public class Enemy : MonoBehaviour
         yield break;
     }
 
-    IEnumerator ShotTornado(int iteration, float delay)
+    IEnumerator ShotTornado(int lines, float delay)
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
 
         float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
 
-        for (int i = 0; i < iteration; i++)
+        for (int i = 0; i < lines; i++)
         {
             GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
 
             float angleRad = angle * Mathf.Deg2Rad;
             instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed2;
-            angle += 360 / iteration;
+            angle += 360 / lines;
             yield return new WaitForSeconds(delay);
         }
     }
