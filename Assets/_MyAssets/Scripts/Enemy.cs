@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
     [Header("Windmill")]
     public float bulletSpeed3;
     public int iteration3;
-    public int lines2;
+    public int lines3;
     public float bias;
     public float delay3;
 
@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.C))
         {
-            StartCoroutine(ShotWindmill(iteration3, lines2, bias, delay3));
+            StartCoroutine(ShotWindmill(iteration3, lines3, bias, delay3));
         }
     }
 
