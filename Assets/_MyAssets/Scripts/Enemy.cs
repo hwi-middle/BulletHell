@@ -28,7 +28,11 @@ public class Enemy : MonoBehaviour
 
     [Header("Heart")]
     public float bulletSpeed4;
-    public int iteration4;
+    public int lines4;
+
+    [Header("Star")]
+    public float bulletSpeed5;
+    public int lines5;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +58,7 @@ public class Enemy : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
-            StartCoroutine(ShotHeart(iteration4));
+            StartCoroutine(ShotHeart(lines4));
         }
     }
 
@@ -120,11 +124,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    IEnumerator ShotHeart(int iteration)
+    IEnumerator ShotHeart(int lines)
     {
-        for (int i = 1; i <= iteration; i++)
+        for (int i = 1; i <= lines; i++)
         {
-            float t = (360 * (i / (float)iteration)) * Mathf.Deg2Rad;
+            float t = (360 * (i / (float)lines)) * Mathf.Deg2Rad;
             float x = 16 * Mathf.Sin(t) * Mathf.Sin(t) * Mathf.Sin(t);
             float y = 13 * Mathf.Cos(t) - 5 * Mathf.Cos(2 * t) - 2 * Mathf.Cos(3 * t) - Mathf.Cos(4 * t);
 
@@ -137,7 +141,7 @@ public class Enemy : MonoBehaviour
             Vector3 pos = new Vector3(x, y, 0) * 0.05f;
             GameObject instance = Instantiate(bullet, transform.position + pos, Quaternion.Euler(0, 0, angle));
 
-            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(x, y) * bulletSpeed4;
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(x, y) / 1.590547f * bulletSpeed4;   //최댓값으로 나누어 가장 빠른 탄막이 다른 탄막의 속도와 같도록 조정
         }
 
         yield break;
