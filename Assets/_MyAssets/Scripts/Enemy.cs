@@ -23,7 +23,8 @@ public class Enemy : MonoBehaviour
     public float bulletSpeed3;
     public int iteration3;
     public int lines3;
-    public float bias;
+    public float bias3_A;
+    public float bias3_B;
     public float delay3;
 
     [Header("Heart")]
@@ -54,7 +55,7 @@ public class Enemy : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.C))
         {
-            StartCoroutine(ShotWindmill(iteration3, lines3, bias, delay3));
+            StartCoroutine(ShotWindmill(iteration3, lines3, bias3_A, bias3_B + 10, delay3));
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
@@ -102,7 +103,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    IEnumerator ShotWindmill(int iteration, int lines, float bias, float delay)
+    IEnumerator ShotWindmill(int iteration, int lines, float bias1, float bias2, float delay)
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
@@ -119,7 +120,9 @@ public class Enemy : MonoBehaviour
                 instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed3;
                 angle += 360 / lines;
             }
-            b += bias;
+
+            b += Mathf.Lerp(bias1, bias2, i / (float)iteration);
+            Debug.Log(b);
             yield return new WaitForSeconds(delay);
         }
     }

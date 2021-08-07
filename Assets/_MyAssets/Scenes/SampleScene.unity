@@ -458,7 +458,10 @@ MonoBehaviour:
   bulletSpeed3: 2
   iteration3: 100
   lines3: 6
-  bias: 65
-  delay3: 0.1
+  bias3_A: 50
+  bias3_B: 65
+  delay3: 0.05
   bulletSpeed4: 2
-  iteration4: 50
+  lines4: 50
+  bulletSpeed5: 2
+  lines5: 50
