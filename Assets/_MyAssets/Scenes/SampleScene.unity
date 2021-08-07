@@ -285,7 +285,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1206224384}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.9, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -3.77, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -430,7 +430,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1256133403}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.89, z: 0}
+  m_LocalPosition: {x: 0, y: 2.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -450,13 +450,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   bullet: {fileID: 6555519710620739940, guid: 3aa6d62a1c44aeb4389d6344a4a15b49, type: 3}
-  bulletSpeed1: 1
-  lines1: 10
-  bulletSpeed2: 1
-  iteration2: 100
-  delay2: 0
-  bulletSpeed3: 1
+  bulletSpeed1: 2
+  lines1: 20
+  bulletSpeed2: 2
+  lines2: 20
+  delay2: 0.05
+  bulletSpeed3: 2
   iteration3: 100
-  lines2: 5
-  bias: 70
+  lines3: 6
+  bias: 65
   delay3: 0.1
+  bulletSpeed4: 2
+  iteration4: 50

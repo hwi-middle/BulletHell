@@ -26,6 +26,10 @@ public class Enemy : MonoBehaviour
     public float bias;
     public float delay3;
 
+    [Header("Heart")]
+    public float bulletSpeed4;
+    public int iteration4;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +51,10 @@ public class Enemy : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.C))
         {
             StartCoroutine(ShotWindmill(iteration3, lines3, bias, delay3));
+        }
+        else if (Input.GetKeyDown(KeyCode.V))
+        {
+            StartCoroutine(ShotHeart(iteration4));
         }
     }
 
@@ -110,5 +118,28 @@ public class Enemy : MonoBehaviour
             b += bias;
             yield return new WaitForSeconds(delay);
         }
+    }
+
+    IEnumerator ShotHeart(int iteration)
+    {
+        for (int i = 1; i <= iteration; i++)
+        {
+            float t = (360 * (i / (float)iteration)) * Mathf.Deg2Rad;
+            float x = 16 * Mathf.Sin(t) * Mathf.Sin(t) * Mathf.Sin(t);
+            float y = 13 * Mathf.Cos(t) - 5 * Mathf.Cos(2 * t) - 2 * Mathf.Cos(3 * t) - Mathf.Cos(4 * t);
+
+            x *= 0.1f;
+            y *= 0.1f;
+
+            Vector3 vector = new Vector3(x * Mathf.Rad2Deg, y * Mathf.Rad2Deg, 0);
+
+            float angle = Mathf.Atan2(vector.y, vector.x) * Mathf.Rad2Deg;
+            Vector3 pos = new Vector3(x, y, 0) * 0.05f;
+            GameObject instance = Instantiate(bullet, transform.position + pos, Quaternion.Euler(0, 0, angle));
+
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(x, y) * bulletSpeed4;
+        }
+
+        yield break;
     }
 }
