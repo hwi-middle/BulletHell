@@ -450,6 +450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   bullet: {fileID: 6555519710620739940, guid: 3aa6d62a1c44aeb4389d6344a4a15b49, type: 3}
+  bullet2: {fileID: 6555519710620739940, guid: 6173a3a227e31fd43a52c48fab387947, type: 3}
   bulletSpeed1: 2
   lines1: 20
   bulletSpeed2: 2
@@ -462,6 +463,10 @@ MonoBehaviour:
   bias3_B: 65
   delay3: 0.05
   bulletSpeed4: 2
-  lines4: 50
-  bulletSpeed5: 2
-  lines5: 50
+  iteration4: 100
+  lines4: 6
+  bias4_A: 60
+  bias4_B: 60
+  delay4: 0.05
+  bulletSpeed5: 0
+  lines5: 0

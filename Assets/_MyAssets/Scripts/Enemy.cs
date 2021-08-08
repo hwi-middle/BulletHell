@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     private Player target;
     [SerializeField] private float speed = 1;
     [SerializeField] private GameObject bullet;
+    [SerializeField] private GameObject bullet2;
 
     [Header("Circle")]
     public float bulletSpeed1;
@@ -18,7 +19,6 @@ public class Enemy : MonoBehaviour
     public int lines2;
     public float delay2;
 
-
     [Header("Windmill")]
     public float bulletSpeed3;
     public int iteration3;
@@ -27,11 +27,15 @@ public class Enemy : MonoBehaviour
     public float bias3_B;
     public float delay3;
 
-    [Header("Heart")]
+    [Header("Double Windmill")]
     public float bulletSpeed4;
+    public int iteration4;
     public int lines4;
+    public float bias4_A;
+    public float bias4_B;
+    public float delay4;
 
-    [Header("Star")]
+    [Header("Heart")]
     public float bulletSpeed5;
     public int lines5;
 
@@ -55,11 +59,15 @@ public class Enemy : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.C))
         {
-            StartCoroutine(ShotWindmill(iteration3, lines3, bias3_A, bias3_B + 10, delay3));
+            StartCoroutine(ShotWindmill(iteration3, lines3, bias3_A, bias3_B, delay3));
         }
         else if (Input.GetKeyDown(KeyCode.V))
         {
-            StartCoroutine(ShotHeart(lines4));
+            StartCoroutine(ShotHeart(lines5));
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(ShotDoubleWindmill(iteration4, lines4, bias4_A, bias4_B, delay4));
         }
     }
 
@@ -127,6 +135,42 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    IEnumerator ShotDoubleWindmill(int iteration, int lines, float bias1, float bias2, float delay)
+    {
+        Vector3 targetVector = target.transform.position - transform.position;
+        Vector3 len = transform.position - target.transform.position;
+
+        float b1 = 0;
+        float b2 = 0;
+        for (int i = 0; i < iteration; i++)
+        {
+            float angle1 = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg + b1;
+            for (int j = 0; j < lines; j++)
+            {
+                GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle1));
+
+                float angleRad = angle1 * Mathf.Deg2Rad;
+                instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed4;
+                angle1 += 360 / lines;
+            }
+
+            float angle2 = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg - b2;
+            for (int j = 0; j < lines; j++)
+            {
+                GameObject instance = Instantiate(bullet2, transform.position, Quaternion.Euler(0, 0, angle2));
+
+                float angleRad = angle2 * Mathf.Deg2Rad;
+                instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed4;
+                angle2 -= 360 / lines;
+            }
+            b1 += Mathf.Lerp(bias1, bias2, i / (float)iteration);
+            b2 += Mathf.Lerp(bias1, bias2, i / (float)iteration);
+            yield return new WaitForSeconds(delay);
+        }
+
+
+    }
+
     IEnumerator ShotHeart(int lines)
     {
         for (int i = 1; i <= lines; i++)
@@ -144,9 +188,9 @@ public class Enemy : MonoBehaviour
             Vector3 pos = new Vector3(x, y, 0) * 0.05f;
             GameObject instance = Instantiate(bullet, transform.position + pos, Quaternion.Euler(0, 0, angle));
 
-            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(x, y) / 1.590547f * bulletSpeed4;   //최댓값으로 나누어 가장 빠른 탄막이 다른 탄막의 속도와 같도록 조정
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(x, y) / 1.590547f * bulletSpeed5;   //최댓값으로 나누어 가장 빠른 탄막이 다른 탄막의 속도와 같도록 조정
         }
 
         yield break;
-    }
+    }   
 }
