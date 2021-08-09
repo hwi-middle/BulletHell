@@ -452,7 +452,7 @@ MonoBehaviour:
   bullet: {fileID: 6555519710620739940, guid: 3aa6d62a1c44aeb4389d6344a4a15b49, type: 3}
   bullet2: {fileID: 6555519710620739940, guid: 6173a3a227e31fd43a52c48fab387947, type: 3}
   bulletSpeed1: 2
-  lines1: 20
+  lines1: 1
   bulletSpeed2: 2
   lines2: 20
   delay2: 0.05
@@ -460,13 +460,13 @@ MonoBehaviour:
   iteration3: 100
   lines3: 6
   bias3_A: 50
-  bias3_B: 65
+  bias3_B: 70
   delay3: 0.05
-  bulletSpeed4: 2
-  iteration4: 100
-  lines4: 6
-  bias4_A: 60
-  bias4_B: 60
-  delay4: 0.05
-  bulletSpeed5: 0
-  lines5: 0
+  bulletSpeed4: 3
+  iteration4: 150
+  lines4: 3
+  bias4_A: 10
+  bias4_B: 15
+  delay4: 0.1
+  bulletSpeed5: 2
+  lines5: 50

@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
 
             float angleRad = angle * Mathf.Deg2Rad;
             instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed1;
-            angle += 360 / lines;
+            angle += 360 / (float)lines;
         }
         yield break;
     }
@@ -192,5 +192,5 @@ public class Enemy : MonoBehaviour
         }
 
         yield break;
-    }   
+    }
 }
