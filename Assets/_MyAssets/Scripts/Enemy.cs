@@ -49,25 +49,25 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             StartCoroutine(ShotCircle(lines1, false));
         }
-        else if (Input.GetKeyDown(KeyCode.X))
+        else if (Input.GetKeyDown(KeyCode.W))
         {
             StartCoroutine(ShotTornado(lines2, delay2));
         }
-        else if (Input.GetKeyDown(KeyCode.C))
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             StartCoroutine(ShotWindmill(iteration3, lines3, bias3_A, bias3_B, delay3));
         }
-        else if (Input.GetKeyDown(KeyCode.V))
-        {
-            StartCoroutine(ShotHeart(lines5));
-        }
-        else if (Input.GetKeyDown(KeyCode.Q))
+        else if (Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(ShotDoubleWindmill(iteration4, lines4, bias4_A, bias4_B, delay4));
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            StartCoroutine(ShotHeart(lines5));
         }
     }
 
@@ -130,7 +130,6 @@ public class Enemy : MonoBehaviour
             }
 
             b += Mathf.Lerp(bias1, bias2, i / (float)iteration);
-            Debug.Log(b);
             yield return new WaitForSeconds(delay);
         }
     }
@@ -139,7 +138,7 @@ public class Enemy : MonoBehaviour
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
-
+        
         float b1 = 0;
         float b2 = 0;
         for (int i = 0; i < iteration; i++)
