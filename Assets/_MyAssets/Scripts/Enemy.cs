@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            StartCoroutine(ShotCircle(lines1, false));
+            StartCoroutine(ShotCircle(lines1));
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
@@ -71,16 +71,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    IEnumerator ShotCircle(int lines, bool setToTarget)
+    IEnumerator ShotCircle(int lines)
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
 
         float angle = DEFAULT_ANGLE;
-        if (setToTarget)
-        {
-            angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
-        }
 
         for (int i = 0; i < lines; i++)
         {
