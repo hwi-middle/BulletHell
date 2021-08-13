@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            StartCoroutine(ShotWindmill(iteration3, lines3, bias3_A, bias3_B, delay3));
+            StartCoroutine(ShotWindmill(iteration3, lines3, bias3_A, bias3_B, delay3, true));
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
@@ -111,7 +111,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    IEnumerator ShotWindmill(int iteration, int lines, float bias1, float bias2, float delay)
+    IEnumerator ShotWindmill(int iteration, int lines, float bias1, float bias2, float delay, bool returnToOrigin)
     {
         Vector3 targetVector = target.transform.position - transform.position;
         Vector3 len = transform.position - target.transform.position;
@@ -131,6 +131,25 @@ public class Enemy : MonoBehaviour
 
             b += Mathf.Lerp(bias1, bias2, i / (float)iteration);
             yield return new WaitForSeconds(delay);
+        }
+
+        if(returnToOrigin)
+        {
+            for (int i = 0; i < iteration; i++)
+            {
+                float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg + b;
+                for (int j = 0; j < lines; j++)
+                {
+                    GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
+
+                    float angleRad = angle * Mathf.Deg2Rad;
+                    instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed3;
+                    angle += 360 / lines;
+                }
+
+                b += Mathf.Lerp(bias2, bias1, i / (float)iteration);
+                yield return new WaitForSeconds(delay);
+            }
         }
     }
 
