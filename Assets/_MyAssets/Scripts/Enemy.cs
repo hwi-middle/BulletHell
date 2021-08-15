@@ -39,6 +39,11 @@ public class Enemy : MonoBehaviour
     public float bulletSpeed5;
     public int lines5;
 
+    [Header("Arc")]
+    public float bulletSpeed6;
+    public int lines6;
+    public float angle6;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,13 +74,14 @@ public class Enemy : MonoBehaviour
         {
             StartCoroutine(ShotHeart(lines5));
         }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            StartCoroutine(ShotArc(lines6, angle6, true, 0f));
+        }
     }
 
     IEnumerator ShotCircle(int lines)
     {
-        Vector3 targetVector = target.transform.position - transform.position;
-        Vector3 len = transform.position - target.transform.position;
-
         float angle = DEFAULT_ANGLE;
 
         for (int i = 0; i < lines; i++)
@@ -91,10 +97,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator ShotTornado(int lines, float delay)
     {
-        Vector3 targetVector = target.transform.position - transform.position;
-        Vector3 len = transform.position - target.transform.position;
-
-        float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg;
+        float angle = DEFAULT_ANGLE;
 
         for (int i = 0; i < lines; i++)
         {
@@ -110,12 +113,11 @@ public class Enemy : MonoBehaviour
     IEnumerator ShotWindmill(int iteration, int lines, float bias1, float bias2, float delay, bool returnToOrigin)
     {
         Vector3 targetVector = target.transform.position - transform.position;
-        Vector3 len = transform.position - target.transform.position;
 
         float b = 0;
         for (int i = 0; i < iteration; i++)
         {
-            float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg + b;
+            float angle = Mathf.Atan2(targetVector.y, targetVector.x) * Mathf.Rad2Deg + b;
             for (int j = 0; j < lines; j++)
             {
                 GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
@@ -129,11 +131,11 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(delay);
         }
 
-        if(returnToOrigin)
+        if (returnToOrigin)
         {
             for (int i = 0; i < iteration; i++)
             {
-                float angle = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg + b;
+                float angle = Mathf.Atan2(targetVector.y, targetVector.x) * Mathf.Rad2Deg + b;
                 for (int j = 0; j < lines; j++)
                 {
                     GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
@@ -152,13 +154,12 @@ public class Enemy : MonoBehaviour
     IEnumerator ShotDoubleWindmill(int iteration, int lines, float bias1, float bias2, float delay)
     {
         Vector3 targetVector = target.transform.position - transform.position;
-        Vector3 len = transform.position - target.transform.position;
-        
+
         float b1 = 0;
         float b2 = 0;
         for (int i = 0; i < iteration; i++)
         {
-            float angle1 = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg + b1;
+            float angle1 = Mathf.Atan2(targetVector.y, targetVector.x) * Mathf.Rad2Deg + b1;
             for (int j = 0; j < lines; j++)
             {
                 GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle1));
@@ -168,7 +169,7 @@ public class Enemy : MonoBehaviour
                 angle1 += 360 / lines;
             }
 
-            float angle2 = Mathf.Atan2(len.y, len.x) * Mathf.Rad2Deg - b2;
+            float angle2 = Mathf.Atan2(targetVector.y, targetVector.x) * Mathf.Rad2Deg - b2;
             for (int j = 0; j < lines; j++)
             {
                 GameObject instance = Instantiate(bullet2, transform.position, Quaternion.Euler(0, 0, angle2));
@@ -203,6 +204,39 @@ public class Enemy : MonoBehaviour
             GameObject instance = Instantiate(bullet, transform.position + pos, Quaternion.Euler(0, 0, angle));
 
             instance.GetComponent<Rigidbody2D>().velocity = new Vector2(x, y) / 1.590547f * bulletSpeed5;   //최댓값으로 나누어 가장 빠른 탄막이 다른 탄막의 속도와 같도록 조정
+        }
+
+        yield break;
+    }
+
+    IEnumerator ShotArc(int lines, float arcAngle, bool targetToPlayer, float bias)
+    {
+        Vector3 targetVector = target.transform.position - transform.position;
+        float angle;
+        if (targetToPlayer)
+        {
+            angle = Mathf.Atan2(targetVector.y, targetVector.x) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            angle = DEFAULT_ANGLE;
+        }
+
+        angle += bias;
+
+        angle += (arcAngle / lines) * (lines / 2);
+        if (lines % 2 == 0)
+        {
+            angle -= (arcAngle / lines) / 2;
+        }
+
+        for (int i = 0; i < lines; i++)
+        {
+            GameObject instance = Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, angle));
+
+            float angleRad = angle * Mathf.Deg2Rad;
+            instance.GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized * bulletSpeed6;
+            angle -= arcAngle / lines;
         }
 
         yield break;

@@ -201,7 +201,9 @@ MonoBehaviour:
 
     Double Windmill
 
-    Heart-shaped'
+    Heart-shaped
+
+    Arc-shaped'
 --- !u!222 &159237094
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -354,7 +356,9 @@ MonoBehaviour:
 
     R
 
-    A'
+    A
+
+    S'
 --- !u!222 &504748766
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -710,6 +714,9 @@ MonoBehaviour:
   delay4: 0.1
   bulletSpeed5: 2
   lines5: 50
+  bulletSpeed6: 2
+  lines6: 5
+  angle6: 20
 --- !u!1 &1515649624
 GameObject:
   m_ObjectHideFlags: 0
